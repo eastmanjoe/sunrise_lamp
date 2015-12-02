@@ -3,7 +3,7 @@
 #
 #
 '''
-Module to perform the scheduling functions
+Module to perform the alarm functions
 '''
 
 #---------------------------------------------------------------------------#
@@ -19,8 +19,6 @@ import logging
 from ConfigParser import SafeConfigParser, NoOptionError
 from logging.config import fileConfig
 
-from configParse import configParse
-
 __version__ = '0.1.0'
 
 #---------------------------------------------------------------------------#
@@ -33,12 +31,12 @@ def signal_handler(signal, frame):
 #---------------------------------------------------------------------------#
 class alarm(threading.Thread):
     """performs the function of the alarm
-        duration  and snooze_interval are defined in seconds
+        duration and snooze_interval are defined in seconds
     """
     def __init__(self, duration=300, snooze=420, time_format=24):
         super(alarm, self).__init__()
         self.threadID = 2
-        self.name = '%(prog)s'
+        self.name = 'alarm'
         self.stoprequest = threading.Event()
 
         self.duration = duration
@@ -78,9 +76,9 @@ class alarm(threading.Thread):
         super(dataValidation, self).join(timeout)
 
     def setStartTime(self, start_time):
-        if self.time_format = 24:
+        if self.time_format == 24:
             self.start = time.strptime(start_time, '%H:%M')
-        elif self.time_format = 12:
+        elif self.time_format == 12:
             self.start = time.strptime(start_time, '%I:%M %p')
 
         self.end = self.start + duration
@@ -112,10 +110,10 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
     fileConfig('sunrise.ini')
-    logger = logging.getLogger('scheduler')
+    logger = logging.getLogger('alarm')
 
 
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     # parser.add_argument(
     #     '--sw_file', help='file path and name of Sierra Wireless file',
     #     default='C:\\Users\\jeastman\\Desktop\\Draker SN List_Truncated.csv'
